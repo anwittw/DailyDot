@@ -24,7 +24,7 @@ const cors = require("cors");
 const mongoose = require("./config/database");
 
 const typeDefs = require("./api/graphqlSchema");
-const resolvers = require("./api/resolvers");
+const resolvers = require("./api/resolvers/_resolvers");
 
 const User = require("./api/models/User");
 const Dot = require("./api/models/Dot");

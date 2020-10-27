@@ -46,10 +46,32 @@ const main = async () => {
 
   const app = express();
 
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+
+  const RedisStore = connectRedis(session);
+  const redisClient = redis.createClient();
+
   app.use(
     cors({
       origin: __clientURL__,
       credentials: true,
+    })
+  );
+
+  app.use(
+    session({
+      name: __sessionName__,
+      store: new RedisStore({ client: redisClient, disableTouch: true }),
+      cookie: {
+        maxAge: __cookieMaxAge__,
+        httpOnly: true,
+        secure: __prod__, // cookie only works in https
+        sameSite: "lax",
+      },
+      saveUninitialized: false,
+      secret: __sessionSecret__,
+      resave: false,
     })
   );
 
@@ -77,27 +99,6 @@ const main = async () => {
     })
   );
   app.use(morgan(__prod__ ? "combined" : "dev"));
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
-
-  const RedisStore = connectRedis(session);
-  const redisClient = redis.createClient();
-
-  app.use(
-    session({
-      name: __sessionName__,
-      store: new RedisStore({ client: redisClient, disableTouch: true }),
-      cookie: {
-        maxAge: __cookieMaxAge__,
-        httpOnly: true,
-        secure: __prod__, // cookie only works in https
-        sameSite: "lax",
-      },
-      saveUninitialized: false,
-      secret: __sessionSecret__,
-      resave: false,
-    })
-  );
 
   app.listen(__serverPort__, () => {
     console.log("Server startd on local port " + __serverPort__);

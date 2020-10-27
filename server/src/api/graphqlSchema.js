@@ -23,6 +23,7 @@ const typeDefs = gql`
   }
   type Query {
     user(_id: ID!): User!
+    me: User
     users: [User]
     login(username: String!, password: String!): User
     dot(_id: ID!): Dot!

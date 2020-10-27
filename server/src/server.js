@@ -26,6 +26,10 @@ const mongoose = require("./config/database");
 const typeDefs = require("./api/graphqlSchema");
 const resolvers = require("./api/resolvers");
 
+const User = require("./api/models/User");
+const Dot = require("./api/models/Dot");
+const Activity = require("./api/models/Activity");
+
 const main = async () => {
   console.log(__dirname);
   console.log(
@@ -40,8 +44,28 @@ const main = async () => {
     __dbUri__
   );
 
-  const apollo = new ApolloServer({ typeDefs, resolvers });
   const app = express();
+
+  app.use(
+    cors({
+      origin: __clientURL__,
+      credentials: true,
+    })
+  );
+
+  const apollo = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: async ({ req }) => {
+      return {
+        models: {
+          User,
+          Dot,
+          Activity,
+        },
+      };
+    },
+  });
 
   apollo.applyMiddleware({ app });
 
@@ -58,13 +82,6 @@ const main = async () => {
 
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient();
-
-  app.use(
-    cors({
-      origin: __clientURL__,
-      credentials: true,
-    })
-  );
 
   app.use(
     session({

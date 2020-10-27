@@ -5,7 +5,6 @@ const typeDefs = gql`
     _id: ID
     username: String
     email: String
-    password: String
     dots: [Dot]
     activities: [Activity]
   }
@@ -14,14 +13,18 @@ const typeDefs = gql`
     date: String
     _user: String
     _activity: String
+    user: User
   }
   type Activity {
     _id: ID
     title: String
     _user: String
+    user: User
   }
   type Query {
+    user(_id: ID!): User!
     users: [User]
+    dot(_id: ID!): Dot!
     dots: [Dot]
     activities: [Activity]
   }

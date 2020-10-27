@@ -21,7 +21,7 @@ const session = require("express-session");
 const connectRedis = require("connect-redis");
 const cors = require("cors");
 
-const mongoose = require("./config/database");
+const mongoose = require("./api/database");
 
 const typeDefs = require("./api/graphqlSchema");
 const resolvers = require("./api/resolvers/_resolvers");
@@ -56,15 +56,15 @@ const main = async () => {
   const apollo = new ApolloServer({
     typeDefs,
     resolvers,
-    context: async ({ req }) => {
-      return {
-        models: {
-          User,
-          Dot,
-          Activity,
-        },
-      };
-    },
+    context: ({ req, res }) => ({
+      req,
+      res,
+      models: {
+        User,
+        Dot,
+        Activity,
+      },
+    }),
   });
 
   apollo.applyMiddleware({ app });

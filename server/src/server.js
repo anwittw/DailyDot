@@ -75,6 +75,15 @@ const main = async () => {
     })
   );
 
+  app.use(
+    morgan("combined", {
+      stream: fs.createWriteStream(__dirname + "/logs/" + "access.log", {
+        flags: "a",
+      }),
+    })
+  );
+  app.use(morgan(__prod__ ? "combined" : "dev"));
+
   const apollo = new ApolloServer({
     typeDefs,
     resolvers,
@@ -89,16 +98,7 @@ const main = async () => {
     }),
   });
 
-  apollo.applyMiddleware({ app });
-
-  app.use(
-    morgan("common", {
-      stream: fs.createWriteStream(__dirname + "/logs/" + "access.log", {
-        flags: "a",
-      }),
-    })
-  );
-  app.use(morgan(__prod__ ? "combined" : "dev"));
+  apollo.applyMiddleware({ app, cors: false, bodyParser: false });
 
   app.listen(__serverPort__, () => {
     console.log("Server startd on local port " + __serverPort__);

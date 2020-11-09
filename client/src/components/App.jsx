@@ -1,7 +1,6 @@
 import { Router, Link } from "@reach/router";
 import { ApolloProvider } from "@apollo/client";
 import Home from "../pages/Home";
-import Me from "../pages/Me";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import UserContextProvider from "../context/UserContext";
 
@@ -17,7 +16,6 @@ function App() {
       <UserContextProvider>
         <Router>
           <Home path="/" />
-          <Me path="/me" />
         </Router>
       </UserContextProvider>
     </ApolloProvider>

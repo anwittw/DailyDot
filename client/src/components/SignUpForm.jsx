@@ -16,7 +16,6 @@ function SignUpForm(props) {
 
   function onSubmit(e) {
     e.preventDefault();
-    console.log(formValues);
     signup({
       variables: {
         username: formValues.username,

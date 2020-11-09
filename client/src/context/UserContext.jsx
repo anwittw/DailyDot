@@ -5,9 +5,9 @@ export const UserContext = createContext();
 export default class UserContextProvider extends Component {
   constructor(props) {
     super(props);
-    this.state = { username: "", _id: "", email: "" };
-    this.setUser = (username, _id, email) => {
-      this.setState({ username, _id, email });
+    this.state = { user: { username: "", email: "", _id: "" } };
+    this.setUser = (user) => {
+      this.setState((prevState) => ({ user: { ...prevState.user, ...user } }));
     };
   }
 

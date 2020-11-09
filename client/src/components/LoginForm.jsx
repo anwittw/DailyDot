@@ -11,7 +11,7 @@ function LoginForm(props) {
 
   const [login, { loading, error }] = useMutation(LOGIN, {
     onCompleted({ login }) {
-      setUser(login.username, login._id, login.email);
+      setUser(login.user);
     },
   });
 

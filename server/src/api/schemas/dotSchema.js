@@ -4,14 +4,20 @@ const dotTypes = gql`
   type Dot {
     _id: ID
     date: String
-    _user: String
-    _activity: String
+    activity: Activity
     user: User
+  }
+  type DotResponse {
+    dot: Dot
+    errors: [FieldError]
   }
 
   extend type Query {
-    dot(_id: ID!): Dot!
-    dots: [Dot]
+    dot(_id: ID!): DotResponse
+  }
+  extend type Mutation {
+    createDot(date: String!, user: String!, activity: String!): DotResponse
+    deleteDot(_id: ID!): MessageResponse
   }
 `;
 
